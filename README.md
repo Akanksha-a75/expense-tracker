@@ -1,10 +1,10 @@
-# 💰 Expense Tracker
+# Expense Tracker
 
 A multi-user expense tracking web application built with **FastAPI**, **Streamlit**, and **PostgreSQL** — featuring OTP-based authentication, budget alerts, recurring expenses, and analytics dashboards.
 
 ---
 
-## ✨ Features
+## Features
 
 - **Expense Management** — Add, edit, delete, and categorise your expenses
 - **Budget Limits & Alerts** — Set monthly budgets per category and get notified when you cross them
@@ -15,7 +15,7 @@ A multi-user expense tracking web application built with **FastAPI**, **Streamli
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -27,7 +27,7 @@ A multi-user expense tracking web application built with **FastAPI**, **Streamli
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 User
@@ -54,7 +54,7 @@ PostgreSQL Database  (users, expenses, budgets, OTPs)
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 expense-tracker/
@@ -83,7 +83,7 @@ expense-tracker/
 
 ---
 
-## ⚙️ Setup & Installation
+## Setup & Installation
 
 ### Prerequisites
 - Python 3.10+
@@ -124,7 +124,7 @@ poetry run streamlit run frontend/app.py
 
 ---
 
-## 👥 Team
+## Team
 
 | Name | GitHub |
 |---|---|
