@@ -1,6 +1,6 @@
 # Expense Tracker
 
-A multi-user expense tracking web application built with **FastAPI**, **Streamlit**, and **PostgreSQL** — featuring OTP-based authentication, budget alerts, recurring expenses, and analytics dashboards.
+A multi-user expense tracking web application built with **FastAPI**, **Streamlit**, and **MYSQL** — featuring OTP-based authentication, budget alerts, recurring expenses, and analytics dashboards.
 
 ---
 
