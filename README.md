@@ -21,7 +21,7 @@ A multi-user expense tracking web application built with **FastAPI**, **Streamli
 |---|---|
 | Frontend | Streamlit |
 | Backend | FastAPI |
-| Database | PostgreSQL |
+| Database | MYSQL |
 | Authentication | OTP via Gmail SMTP |
 | Dependency Management | Poetry |
 
@@ -49,7 +49,7 @@ Business Logic  (validations, budget alert rules)
   ↓
 Data Access Layer  (SQL queries, CRUD operations)
   ↓
-PostgreSQL Database  (users, expenses, budgets, OTPs)
+MYSQL Database  (users, expenses, budgets, OTPs)
 ```
 
 ---
