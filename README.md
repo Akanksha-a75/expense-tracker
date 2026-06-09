@@ -1,132 +1,241 @@
-# Expense Tracker
+# 💰 Expense Tracker
 
-A multi-user expense tracking web application built with **FastAPI**, **Streamlit**, and **MYSQL** — featuring OTP-based authentication, budget alerts, recurring expenses, and analytics dashboards.
+A full-stack Expense Tracker application built using **FastAPI**, **Streamlit**, and **MySQL** with **OTP-based email authentication**.
 
----
+## 🚀 Features
 
-## Features
+### Authentication
 
-- **Expense Management** — Add, edit, delete, and categorise your expenses
-- **Budget Limits & Alerts** — Set monthly budgets per category and get notified when you cross them
-- **Recurring Expenses** — Track fixed bills, rent, and subscriptions automatically
-- **Analytics Dashboard** — Visualise spending trends, category breakdowns, and monthly/weekly summaries
-- **Multi-User Support** — Each user has a separate account and sees only their own data
-- **OTP Authentication** — Secure login via a 6-digit one-time password sent to your Gmail
+* User Sign Up
+* OTP-based Sign In
+* Email OTP delivery using SMTP
+* Secure OTP verification
 
----
+### Expense Management
 
-## Tech Stack
+* Add Expense
+* View Expenses
+* Update Expenses
+* Delete Expenses
 
-| Layer | Technology |
-|---|---|
-| Frontend | Streamlit |
-| Backend | FastAPI |
-| Database | MYSQL |
-| Authentication | OTP via Gmail SMTP |
-| Dependency Management | Poetry |
+### Database
 
----
-
-## Architecture
-
-```
-User
-  ↓
-Streamlit UI  (login, register, dashboard, charts)
-  ↓
-FastAPI Backend  (API routes, request handling)
-  ↓
-Auth Module ──────────────→ Gmail SMTP (sends OTP to user email)
-  ↓
-Business Logic  (validations, budget alert rules)
-  ↓
-┌─────────────┬──────────────┬──────────────┬─────────────────┐
-│ Expense     │ Budget       │ Recurring    │ Analytics       │
-│ Module      │ Module       │ Module       │ Module          │
-│ add/edit/   │ limits,      │ bills, subs, │ charts, trends, │
-│ delete      │ alerts       │ rent         │ summaries       │
-└─────────────┴──────────────┴──────────────┴─────────────────┘
-  ↓
-Data Access Layer  (SQL queries, CRUD operations)
-  ↓
-MYSQL Database  (users, expenses, budgets, OTPs)
-```
+* MySQL Integration
+* User Management
+* OTP Verification Records
+* Expense Storage
 
 ---
 
-## Project Structure
+## 🛠️ Tech Stack
 
-```
-expense-tracker/
+### Backend
+
+* FastAPI
+* SQLAlchemy
+* MySQL
+* SMTP (Gmail)
+
+### Frontend
+
+* Streamlit
+
+### Database
+
+* MySQL
+
+### Version Control
+
+* Git
+* GitHub
+
+---
+
+## 📂 Project Structure
+
+```text
+expense_tracker/
+│
 ├── backend/
-│   └── app/
-│       ├── main.py              # FastAPI entry point
-│       ├── database.py          # PostgreSQL connection
-│       ├── models.py            # Database table definitions
-│       ├── schemas.py           # Request/response shapes
-│       ├── auth/
-│       │   ├── otp.py           # OTP generate & verify
-│       │   ├── smtp.py          # Gmail SMTP email sender
-│       │   └── session.py       # Session management
-│       └── routes/
-│           ├── expenses.py      # Expense CRUD routes
-│           ├── budgets.py       # Budget limit routes
-│           ├── recurring.py     # Recurring expense routes
-│           └── analytics.py     # Charts & summary routes
+│   ├── routes/
+│   │   ├── auth.py
+│   │   └── expenses.py
+│   │
+│   ├── utils/
+│   │   ├── otp.py
+│   │   └── email_sender.py
+│   │
+│   ├── database.py
+│   ├── models.py
+│   ├── schemas.py
+│   └── main.py
+│
 ├── frontend/
-│   └── app.py                   # Streamlit UI
-├── .env                         # Secrets (not pushed to GitHub)
-├── .gitignore
-├── README.md
-└── pyproject.toml               # Poetry dependencies
+│   └── app.py
+│
+├── requirements.txt
+└── README.md
 ```
 
 ---
 
-## Setup & Installation
+## ⚙️ Installation
 
-### Prerequisites
-- Python 3.10+
-- PostgreSQL installed and running
-- A Gmail account with App Password enabled
-- Poetry installed
+### 1. Clone Repository
 
-### 1. Clone the repository
 ```bash
 git clone https://github.com/Akanksha-a75/expense-tracker.git
-cd expense-tracker
+cd expense_tracker
 ```
 
-### 2. Install dependencies
+### 2. Create Virtual Environment
+
 ```bash
-poetry install
+python -m venv venv
 ```
 
-### 3. Set up environment variables
+### 3. Activate Virtual Environment
 
-Create a `.env` file in the root directory:
-```
-DATABASE_URL=postgresql://username:password@localhost/expense_tracker
-GMAIL_ADDRESS=your-email@gmail.com
-GMAIL_APP_PASSWORD=your-app-password
-SECRET_KEY=your-secret-key
-```
+#### macOS/Linux
 
-### 4. Run the backend
 ```bash
-poetry run uvicorn backend.app.main:app --reload
+source venv/bin/activate
 ```
 
-### 5. Run the frontend
+#### Windows
+
 ```bash
-poetry run streamlit run frontend/app.py
+venv\Scripts\activate
+```
+
+### 4. Install Dependencies
+
+```bash
+pip install -r requirements.txt
 ```
 
 ---
 
-## Team
+## 🗄️ Database Setup
 
-| Name | GitHub |
-|---|---|
-| Akanksha | [@Akanksha-a75](https://github.com/Akanksha-a75) |
-| Aditi | [@anna8668](https://github.com/anna8668) |
+Create a MySQL database:
+
+```sql
+CREATE DATABASE expense_tracker;
+```
+
+Configure database credentials in `.env`:
+
+```env
+DB_USER=root
+DB_PASSWORD=your_password
+DB_HOST=localhost
+DB_NAME=expense_tracker
+```
+
+---
+
+## 📧 Email Configuration
+
+Generate a Gmail App Password and configure:
+
+```env
+EMAIL_ADDRESS=your_email@gmail.com
+EMAIL_PASSWORD=your_app_password
+```
+
+---
+
+## ▶️ Run Backend
+
+Navigate to backend folder:
+
+```bash
+cd backend
+```
+
+Start FastAPI server:
+
+```bash
+uvicorn main:app --reload
+```
+
+Backend URL:
+
+```text
+http://127.0.0.1:8000
+```
+
+Swagger Documentation:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+---
+
+## ▶️ Run Frontend
+
+Navigate to frontend folder:
+
+```bash
+cd frontend
+```
+
+Start Streamlit application:
+
+```bash
+streamlit run app.py
+```
+
+Frontend URL:
+
+```text
+http://localhost:8501
+```
+
+---
+
+## 📊 API Endpoints
+
+### Authentication
+
+| Method | Endpoint      | Description    |
+| ------ | ------------- | -------------- |
+| POST   | `/signup`     | Create Account |
+| POST   | `/send-otp`   | Send OTP       |
+| POST   | `/verify-otp` | Verify OTP     |
+
+### Expenses
+
+| Method | Endpoint         | Description      |
+| ------ | ---------------- | ---------------- |
+| GET    | `/expenses`      | Get All Expenses |
+| POST   | `/expenses`      | Add Expense      |
+| PUT    | `/expenses/{id}` | Update Expense   |
+| DELETE | `/expenses/{id}` | Delete Expense   |
+
+---
+
+## 🎯 Future Improvements
+
+* User-specific expense tracking
+* Monthly analytics dashboard
+* Expense category charts
+* Download reports as CSV/PDF
+* Budget tracking
+* Expense filtering and search
+* JWT Authentication
+
+---
+
+## 👩‍💻 Contributors
+
+* Aditi Sharma
+* Akanksha
+
+---
+
+## 📜 License
+
+This project is created for educational and learning purposes.
