@@ -18,6 +18,7 @@ class Expense(Base):
     amount = Column(Float, nullable=False)
     date = Column(Date, nullable=False)
     category = Column(String(100), nullable=False)
+    description = Column(String(255), nullable=True)
 
 
 class OTPCode(Base):
