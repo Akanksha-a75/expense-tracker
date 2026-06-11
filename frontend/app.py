@@ -23,28 +23,35 @@ if "logged_in" not in st.session_state:
 # =========================
 # DASHBOARD
 # =========================
+# =========================
+# DASHBOARD
+# =========================
 
 if st.session_state["logged_in"]:
 
     st.title("📊 Expense Dashboard")
     st.success("Welcome to Expense Tracker")
 
-st.subheader("➕ Add Expense")
+    # =========================
+    # ADD EXPENSE
+    # =========================
 
-amount = st.number_input(
+    st.subheader("➕ Add Expense")
+
+    amount = st.number_input(
         "Amount",
         min_value=1
     )
 
-category = st.text_input(
+    category = st.text_input(
         "Category"
     )
 
-description = st.text_input(
+    description = st.text_input(
         "Description"
     )
 
-if st.button("Add Expense"):
+    if st.button("Add Expense"):
 
         response = requests.post(
             "http://127.0.0.1:8000/expenses",
@@ -58,113 +65,108 @@ if st.button("Add Expense"):
 
         st.success(response.json()["message"])
 
-    
+    # =========================
+    # VIEW EXPENSES
+    # =========================
 
-# =========================
-# VIEW EXPENSES
-# =========================
+    st.subheader("📋 View Expenses")
 
-st.subheader("📋 View Expenses")
+    try:
 
-try:
-
-    response = requests.get(
-        "http://127.0.0.1:8000/expenses"
-    )
-
-    expenses = response.json()
-
-    if expenses:
-        st.dataframe(
-            expenses,
-            use_container_width=True
+        response = requests.get(
+            "http://127.0.0.1:8000/expenses"
         )
-    else:
-        st.info("No expenses found.")
 
-except Exception as e:
+        expenses = response.json()
 
-    st.error(
-        f"Error loading expenses: {e}"
+        if expenses:
+            st.dataframe(
+                expenses,
+                use_container_width=True
+            )
+        else:
+            st.info("No expenses found.")
+
+    except Exception as e:
+
+        st.error(
+            f"Error loading expenses: {e}"
+        )
+
+    # =========================
+    # UPDATE EXPENSE
+    # =========================
+
+    st.subheader("✏️ Update Expense")
+
+    expense_id = st.number_input(
+        "Expense ID",
+        min_value=1,
+        key="update_id"
     )
 
-# =========================
-# UPDATE EXPENSE
-# =========================
-
-st.subheader("✏️ Update Expense")
-
-expense_id = st.number_input(
-    "Expense ID",
-    min_value=1,
-    key="update_id"
-)
-
-new_amount = st.number_input(
-    "New Amount",
-    min_value=1,
-    key="update_amount"
-)
-
-new_category = st.text_input(
-    "New Category",
-    key="update_category"
-)
-
-new_description = st.text_input(
-    "New Description",
-    key="update_description"
-)
-
-if st.button("Update Expense"):
-
-    response = requests.put(
-        f"http://127.0.0.1:8000/expenses/{expense_id}",
-        json={
-            "user_id": 1,
-            "amount": new_amount,
-            "category": new_category,
-            "description": new_description
-        }
+    new_amount = st.number_input(
+        "New Amount",
+        min_value=1,
+        key="update_amount"
     )
 
-    st.success(
-        response.json()["message"]
+    new_category = st.text_input(
+        "New Category",
+        key="update_category"
     )
 
-
-
-
-# =========================
-# DELETE EXPENSE
-# =========================
-
-st.subheader("🗑️ Delete Expense")
-
-delete_id = st.number_input(
-    "Expense ID To Delete",
-    min_value=1,
-    key="delete_id"
-)
-
-if st.button("Delete Expense"):
-
-    response = requests.delete(
-        f"http://127.0.0.1:8000/expenses/{delete_id}"
+    new_description = st.text_input(
+        "New Description",
+        key="update_description"
     )
 
-    st.success(
-        response.json()["message"]
+    if st.button("Update Expense"):
+
+        response = requests.put(
+            f"http://127.0.0.1:8000/expenses/{expense_id}",
+            json={
+                "user_id": 1,
+                "amount": new_amount,
+                "category": new_category,
+                "description": new_description
+            }
+        )
+
+        st.success(
+            response.json()["message"]
+        )
+
+    # =========================
+    # DELETE EXPENSE
+    # =========================
+
+    st.subheader("🗑️ Delete Expense")
+
+    delete_id = st.number_input(
+        "Expense ID To Delete",
+        min_value=1,
+        key="delete_id"
     )
 
-st.divider()
+    if st.button("Delete Expense"):
 
-if st.button("Logout"):
+        response = requests.delete(
+            f"http://127.0.0.1:8000/expenses/{delete_id}"
+        )
 
-    st.session_state["logged_in"] = False
-    st.rerun()
+        st.success(
+            response.json()["message"]
+        )
 
-st.stop()
+    st.divider()
+
+    if st.button("Logout"):
+
+        st.session_state["logged_in"] = False
+        st.rerun()
+
+    st.stop()
 
 
 # =========================
