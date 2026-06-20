@@ -11,6 +11,11 @@ if "auth_stage" not in st.session_state or st.session_state.auth_stage != "verif
 st.sidebar.title("Menu")
 page = st.sidebar.radio("Navigate", ["Home", "Add Expense", "View Expenses"])
 
+st.sidebar.divider()
+if st.sidebar.button("🚪 Logout"):
+    st.session_state.clear()
+    st.rerun()
+
 if page == "Home":
     st.write(f"Welcome, {st.session_state.user_email}!")
 

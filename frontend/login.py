@@ -1,7 +1,19 @@
 import streamlit as st
 import requests
+import time
 
 API_BASE = "http://127.0.0.1:8000"
+
+def safe_post(url, payload):
+    for attempt in range(2):
+        try:
+            res = requests.post(url, json=payload, timeout=5)
+            return res
+        except:
+            if attempt == 0:
+                time.sleep(1)
+            else:
+                return None
 
 def show_login():
     st.title("💰 Expense Tracker")
@@ -21,36 +33,34 @@ def show_login():
                 if not email:
                     st.error("Please enter your email.")
                 else:
-                    try:
-                        res = requests.post(f"{API_BASE}/auth/send-otp", json={"email": email})
-                        if res.status_code == 200:
-                            st.session_state.signin_email_val = email
-                            st.session_state.signin_stage = "otp_sent"
-                            st.rerun()
-                        else:
-                            st.error(res.json().get("detail", "Something went wrong."))
-                    except:
+                    res = safe_post(f"{API_BASE}/auth/send-otp", {"email": email})
+                    if res is None:
                         st.error("Cannot reach server. Is the backend running?")
+                    elif res.status_code == 200:
+                        st.session_state.signin_email_val = email
+                        st.session_state.signin_stage = "otp_sent"
+                        st.rerun()
+                    else:
+                        st.error(res.json().get("detail", "Something went wrong."))
 
         elif st.session_state.signin_stage == "otp_sent":
             st.info(f"OTP sent to **{st.session_state.signin_email_val}**")
             otp = st.text_input("Enter OTP", key="signin_otp")
             if st.button("Verify OTP", key="signin_verify"):
-                try:
-                    res = requests.post(f"{API_BASE}/auth/verify-otp", json={
-                        "email": st.session_state.signin_email_val,
-                        "otp": otp
-                    })
-                    if res.status_code == 200:
-                        data = res.json()
-                        st.session_state.auth_stage = "verified"
-                        st.session_state.user_token = data.get("token")
-                        st.session_state.user_email = st.session_state.signin_email_val
-                        st.rerun()
-                    else:
-                        st.error(res.json().get("detail", "Invalid or expired OTP."))
-                except:
+                res = safe_post(f"{API_BASE}/auth/verify-otp", {
+                    "email": st.session_state.signin_email_val,
+                    "otp": otp
+                })
+                if res is None:
                     st.error("Cannot reach server. Is the backend running?")
+                elif res.status_code == 200:
+                    data = res.json()
+                    st.session_state.auth_stage = "verified"
+                    st.session_state.user_token = data.get("token")
+                    st.session_state.user_email = st.session_state.signin_email_val
+                    st.rerun()
+                else:
+                    st.error(res.json().get("detail", "Invalid or expired OTP."))
 
             if st.button("← Back", key="signin_back"):
                 st.session_state.signin_stage = "entry"
@@ -70,39 +80,37 @@ def show_login():
                 if not name or not email:
                     st.error("Please fill in all fields.")
                 else:
-                    try:
-                        res = requests.post(f"{API_BASE}/auth/signup", json={
-                            "name": name,
-                            "email": email
-                        })
-                        if res.status_code == 200:
-                            st.session_state.signup_email_val = email
-                            st.session_state.signup_stage = "otp_sent"
-                            st.rerun()
-                        else:
-                            st.error(res.json().get("detail", "Something went wrong."))
-                    except:
+                    res = safe_post(f"{API_BASE}/auth/signup", {
+                        "name": name,
+                        "email": email
+                    })
+                    if res is None:
                         st.error("Cannot reach server. Is the backend running?")
+                    elif res.status_code == 200:
+                        st.session_state.signup_email_val = email
+                        st.session_state.signup_stage = "otp_sent"
+                        st.rerun()
+                    else:
+                        st.error(res.json().get("detail", "Something went wrong."))
 
         elif st.session_state.signup_stage == "otp_sent":
             st.info(f"OTP sent to **{st.session_state.signup_email_val}**")
             otp = st.text_input("Enter OTP", key="signup_otp")
             if st.button("Verify OTP", key="signup_verify"):
-                try:
-                    res = requests.post(f"{API_BASE}/auth/verify-otp", json={
-                        "email": st.session_state.signup_email_val,
-                        "otp": otp
-                    })
-                    if res.status_code == 200:
-                        data = res.json()
-                        st.session_state.auth_stage = "verified"
-                        st.session_state.user_token = data.get("token")
-                        st.session_state.user_email = st.session_state.signup_email_val
-                        st.rerun()
-                    else:
-                        st.error(res.json().get("detail", "Invalid or expired OTP."))
-                except:
+                res = safe_post(f"{API_BASE}/auth/verify-otp", {
+                    "email": st.session_state.signup_email_val,
+                    "otp": otp
+                })
+                if res is None:
                     st.error("Cannot reach server. Is the backend running?")
+                elif res.status_code == 200:
+                    data = res.json()
+                    st.session_state.auth_stage = "verified"
+                    st.session_state.user_token = data.get("token")
+                    st.session_state.user_email = st.session_state.signup_email_val
+                    st.rerun()
+                else:
+                    st.error(res.json().get("detail", "Invalid or expired OTP."))
 
             if st.button("← Back", key="signup_back"):
                 st.session_state.signup_stage = "entry"
